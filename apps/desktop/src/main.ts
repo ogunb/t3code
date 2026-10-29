@@ -41,6 +41,7 @@ import * as DesktopConnectionCatalogStore from "./app/DesktopConnectionCatalogSt
 import * as DesktopClerk from "./app/DesktopClerk.ts";
 import * as DesktopCliCommand from "./app/DesktopCliCommand.ts";
 import * as DesktopApplicationMenu from "./window/DesktopApplicationMenu.ts";
+import * as DesktopTray from "./window/DesktopTray.ts";
 import * as DesktopAssets from "./app/DesktopAssets.ts";
 import * as DesktopPrimaryPaste from "./app/DesktopPrimaryPaste.ts";
 import * as DesktopBackendConfiguration from "./backend/DesktopBackendConfiguration.ts";
@@ -215,6 +216,7 @@ const layerDesktopApplication = Layer.mergeAll(
   layerDesktopAppActivation,
   DesktopWebLinks.layer,
   DesktopApplicationMenu.layer,
+  DesktopTray.layer,
   DesktopLinuxUrlHandler.layer,
   DesktopCliCommand.layer,
 ).pipe(
