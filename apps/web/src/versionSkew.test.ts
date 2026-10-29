@@ -100,6 +100,19 @@ describe("versionSkew", () => {
     });
   });
 
+  it("targets the upstream release when a fork -tray client outruns the server", () => {
+    branding.APP_VERSION = "0.1.6-tray.15";
+
+    const mismatch = resolveVersionMismatch("0.1.5");
+    expect(mismatch).toEqual({
+      clientVersion: "0.1.6",
+      serverVersion: "0.1.5",
+      hint: MISMATCH_HINT,
+    });
+    expect(manualServerUpdateCommand(mismatch!.clientVersion)).toBe("npx t3@0.1.6");
+    expect(resolveVersionMismatch("0.1.6")).toBeNull();
+  });
+
   it("falls back to string inequality when a version is not semver", () => {
     expect(resolveVersionMismatch("dev")).toEqual({
       clientVersion: "0.0.34",
