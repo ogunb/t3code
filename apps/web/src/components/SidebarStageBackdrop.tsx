@@ -6,7 +6,7 @@ import { APP_STAGE_LABEL } from "../branding";
 import { resolveServerBackedAppStageLabel } from "../branding.logic";
 import { primaryServerConfigAtom } from "../state/server";
 
-export type SidebarStageBackdropVariant = "nightly" | "dev";
+export type SidebarStageBackdropVariant = "stable" | "nightly" | "dev";
 export type EnvironmentIdentificationPillLabel = "Dev" | "Nightly";
 
 const STAGE_BACKDROP_VIEW_BOX = "0 0 8192 96";
@@ -19,6 +19,7 @@ export function resolveSidebarStageBackdropVariant(
   if (mode === "dev-artwork") return "dev";
   if (mode !== "artwork") return null;
   const normalized = stageLabel.trim().toLowerCase();
+  if (normalized === "beta" || normalized === "latest") return "stable";
   if (normalized === "nightly") return "nightly";
   if (normalized === "dev") return "dev";
   return null;
@@ -61,11 +62,15 @@ export function SidebarStageBackdrop({ variant }: { variant: SidebarStageBackdro
 }
 
 function StageBackdropArt({ variant }: { variant: SidebarStageBackdropVariant }) {
-  return variant === "nightly" ? <NightlySkyArt /> : <DevBlueprintArt />;
+  return variant === "dev" ? <DevBlueprintArt /> : <NightlySkyArt stable={variant === "stable"} />;
 }
 
 export function StageBackdropButtonArt({ variant }: { variant: SidebarStageBackdropVariant }) {
-  return variant === "nightly" ? <NightlySkyArt compact /> : <DevBlueprintArt compact />;
+  return variant === "dev" ? (
+    <DevBlueprintArt compact />
+  ) : (
+    <NightlySkyArt compact stable={variant === "stable"} />
+  );
 }
 
 const NIGHTLY_STARS: ReadonlyArray<{
@@ -99,7 +104,13 @@ const NIGHTLY_SPARKLES: ReadonlyArray<{ x: number; y: number }> = [
   { x: 246, y: 26 },
 ];
 
-function NightlySkyArt({ compact = false }: { compact?: boolean }) {
+function NightlySkyArt({
+  compact = false,
+  stable = false,
+}: {
+  compact?: boolean;
+  stable?: boolean;
+}) {
   const idPrefix = useId().replaceAll(":", "");
   const skyId = `${idPrefix}-stage-night-sky`;
   const glowId = `${idPrefix}-stage-night-glow`;
@@ -111,7 +122,7 @@ function NightlySkyArt({ compact = false }: { compact?: boolean }) {
   return (
     <svg
       data-stage-art="nightly"
-      className="h-full w-full"
+      className={stable ? "stable-stage-art h-full w-full" : "h-full w-full"}
       fill="none"
       preserveAspectRatio="xMinYMin slice"
       viewBox={compact ? "96 0 8192 96" : STAGE_BACKDROP_VIEW_BOX}
