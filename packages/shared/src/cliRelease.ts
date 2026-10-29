@@ -86,6 +86,12 @@ export function desktopUpdateChannelOf(version: string): "latest" | "nightly" {
   return cliReleaseChannelOf(version) === "nightly" ? "nightly" : "latest";
 }
 
+/** Fork desktop builds are `X.Y.Z-tray.N` on top of upstream `X.Y.Z`; servers and runtimes
+ * only exist upstream, so download, install, and update targets use the upstream version. */
+export function upstreamReleaseVersion(version: string): string {
+  return /^(\d+\.\d+\.\d+)-tray\.\d+$/.exec(version)?.[1] ?? version;
+}
+
 /** Whether a track switch may install `found` after its database check cleared `checked`: any build
  * on the switch's track at least as new, since later releases only add migrations. */
 export function acceptsTrackSwitchRelease(

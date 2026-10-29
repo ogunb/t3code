@@ -102,6 +102,10 @@ describe("ssh tunnel scripts", () => {
       SshTunnel.buildRemoteT3RunnerScript(ARCHIVE),
       "T3_ARCHIVE_VERSION='1.2.3-preview.20260911.4'",
     );
+    assert.include(
+      SshTunnel.buildRemoteT3RunnerScript({ archiveVersion: "0.1.5-tray.0" }),
+      "T3_ARCHIVE_VERSION='0.1.5'",
+    );
   });
 
   it.effect("accepts launch JSON after remote shell startup noise", () => {

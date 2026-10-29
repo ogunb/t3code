@@ -3,7 +3,7 @@ import type {
   DesktopSshEnvironmentTarget,
 } from "@t3tools/contracts";
 import { waitForHttpReady as waitForHttpReadyShared } from "@t3tools/shared/httpReadiness";
-import { cliReleaseDownloadBaseUrl } from "@t3tools/shared/cliRelease";
+import { cliReleaseDownloadBaseUrl, upstreamReleaseVersion } from "@t3tools/shared/cliRelease";
 import * as KeyedLock from "@t3tools/shared/KeyedLock";
 import * as NetService from "@t3tools/shared/Net";
 import { extractJsonObject, fromLenientJson } from "@t3tools/shared/schemaJson";
@@ -792,7 +792,7 @@ export class SshMissingRunnerError extends Schema.TaggedError<SshMissingRunnerEr
 
 export function buildRemoteT3RunnerScript(input?: RemoteT3RunnerOptions): string {
   const nodeScriptPath = input?.nodeScriptPath?.trim() || "";
-  const archiveVersion = input?.archiveVersion?.trim() || "";
+  const archiveVersion = upstreamReleaseVersion(input?.archiveVersion?.trim() || "");
   if (nodeScriptPath === "" && archiveVersion === "") {
     throw new SshMissingRunnerError();
   }
