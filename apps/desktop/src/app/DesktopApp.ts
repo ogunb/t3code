@@ -16,6 +16,7 @@ import * as DesktopAppActivation from "./DesktopAppActivation.ts";
 import * as DesktopAppIdentity from "./DesktopAppIdentity.ts";
 import * as DesktopClerk from "./DesktopClerk.ts";
 import * as DesktopApplicationMenu from "../window/DesktopApplicationMenu.ts";
+import * as DesktopTray from "../window/DesktopTray.ts";
 import * as DesktopWindow from "../window/DesktopWindow.ts";
 import * as PreviewPasskeys from "../preview/Passkeys.ts";
 import * as DesktopBackendPool from "../backend/DesktopBackendPool.ts";
@@ -324,6 +325,7 @@ const startup = Effect.gen(function* () {
   yield* appIdentity.configure;
   yield* previewPasskeys.configure;
   yield* applicationMenu.configure;
+  yield* (yield* DesktopTray.DesktopTray).configure;
   yield* updates.configure;
   yield* DesktopRemoteUpdates.listen;
   yield* DesktopStartupRecovery.listen;
