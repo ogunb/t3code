@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { cliArchiveTarCommand, newestCliReleaseVersion, parseChecksums } from "./cliRelease.ts";
+import {
+  cliArchiveTarCommand,
+  newestCliReleaseVersion,
+  parseChecksums,
+  upstreamReleaseVersion,
+} from "./cliRelease.ts";
 
 describe("cliRelease", () => {
   it("parses sha256sum output including binary-mode markers", () => {
@@ -38,5 +43,21 @@ describe("cliRelease", () => {
     expect(newestCliReleaseVersion(releases, "nightly")).toBe("1.2.4-nightly.20260912.7");
     expect(newestCliReleaseVersion(releases, "stable")).toBe("1.2.3");
     expect(newestCliReleaseVersion([{ tag_name: "v1.2.3" }], "preview")).toBeUndefined();
+  });
+
+  it("maps fork -tray builds to their upstream release and leaves other versions alone", () => {
+    expect(upstreamReleaseVersion("0.1.5-tray.0")).toBe("0.1.5");
+    expect(upstreamReleaseVersion("0.1.10-tray.41")).toBe("0.1.10");
+    for (const version of [
+      "0.1.5",
+      "0.1.5-nightly.20261029.3877",
+      "0.1.5-preview.20261029.1",
+      "0.1.5-tray",
+      "0.1.5-tray.x",
+      "v0.1.5-tray.0",
+      "junk",
+    ]) {
+      expect(upstreamReleaseVersion(version)).toBe(version);
+    }
   });
 });
