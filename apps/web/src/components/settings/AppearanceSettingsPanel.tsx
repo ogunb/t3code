@@ -45,10 +45,18 @@ const ENVIRONMENT_IDENTIFICATION_LABELS: Record<EnvironmentIdentificationMode, s
 };
 
 // The default "artwork" follows the running channel, so it is labeled as that channel's art,
-// or as "None" on Latest. The other channel's art is offered as a fixed choice.
+// with the other channels' art offered as fixed choices.
 function environmentIdentificationOptions(
   stageVariant: SidebarStageBackdropVariant | null,
 ): ReadonlyArray<readonly [EnvironmentIdentificationMode, string]> {
+  if (stageVariant === "stable") {
+    return [
+      ["artwork", "Sky artwork"],
+      ["nightly-artwork", "Nightly artwork"],
+      ["dev-artwork", "Dev artwork"],
+      ["none", "None"],
+    ];
+  }
   if (stageVariant === "dev") {
     return [
       ["artwork", "Dev artwork"],
