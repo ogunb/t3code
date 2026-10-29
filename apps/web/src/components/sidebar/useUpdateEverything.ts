@@ -3,6 +3,7 @@ import { useAtomValue } from "@effect/atom-react";
 import { connectionErrorText } from "@t3tools/client-runtime/connection";
 import { PROVIDER_DISPLAY_NAMES } from "@t3tools/contracts";
 
+import { upstreamReleaseVersion } from "@t3tools/shared/cliRelease";
 import { APP_VERSION } from "~/branding";
 import { isDesktopLocalConnectionTarget } from "~/connection/desktopLocal";
 import { isElectron } from "~/env";
@@ -55,7 +56,7 @@ export function useUpdateEverything(
   localUpdateVersion: string | null,
   channelSwitch?: ChannelSwitchRelease,
 ) {
-  const targetVersion = localUpdateVersion ?? APP_VERSION;
+  const targetVersion = upstreamReleaseVersion(localUpdateVersion ?? APP_VERSION);
   const { environments } = useEnvironments();
   const resolve = useMessages();
   const environmentIds = environmentIdsKey(environments.map(({ environmentId }) => environmentId));
